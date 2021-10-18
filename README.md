@@ -6,7 +6,7 @@ Ontario residents can download their enhanced (digitally signed) vaccine passpor
 
 Run the decoder as follows:
 ```
-python on_vac_decode.py <path_to_pdf>
+python on_vax_decode.py <path_to_pdf>
 ```
 You can see sample output in `samples/sample_output`.
 
