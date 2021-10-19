@@ -8,7 +8,7 @@ A simple decoder to view and digitally verify the contents of Ontario's enhanced
 Run the decoder as follows:
 
 ```
-python on_vac_decode.py <path_to_pdf>
+python on_vax_decode.py <path_to_pdf>
 ```
 Ontario residents can download their enhanced (digitally signed) vaccine passport PDF here: [https://covid19.ontariohealth.ca/](https://covid19.ontariohealth.ca/)
 
