@@ -12,6 +12,18 @@ python on_vax_decode.py <path_to_pdf>
 ```
 Ontario residents can download their enhanced (digitally signed) vaccine passport PDF here: [https://covid19.ontariohealth.ca/](https://covid19.ontariohealth.ca/)
 
+## So What?
+
+The main purpose of this project is to provide **transparency** to the Ontario vaccine passport system in the context of personally identifiable information. Ontarians are required to show these QR codes to businesses. These are no longer necessarily ephemeral iteractions; a digital device is used to scan the QR code, which opens new doors to mass information retention and potential abuse.  
+
+The Ontario vaccine certificates contain your _full name_ and _date of birth_, which is sufficient to uniquely indentify most individuals. When you show your passport, this (effectively) unique identifier is paired with a time and location.
+
+In addition to adding digital signatures to vaccine certificates, the government is provides its own verifier app. So having independent verifiers could prove useful in certain scenarios, for example:
+
+1. **A buggy app**. You download your passport but the Verify Ontario app shows the signature is invalid. Independent verifiers can confirm whether the signature really is invalid, or the app itself is wrong.
+2. **A bulnerable app**. Hackers discover a signature bypass exploit in the Verify Ontario app. Independent verifiers can confirm an invalid signature really is invalid.
+3. **Dubious govt claims**. You discover the govt is including some questionable personally-identifiable information in the QR code. The government spokesperson says "oh no, we don't include _that_." An independent verifier could demonstrate otherwise.
+
 ## Notes and References
 
 - Ontario's vaccine passport is based on the SMART Health Cards (SMT) Framework:
@@ -19,6 +31,24 @@ Ontario residents can download their enhanced (digitally signed) vaccine passpor
 - The QR code in `samples/sample_intput.pdf` is provided for visualization purposes. It does not contain a valid [JSON Web Signature](https://datatracker.ietf.org/doc/html/rfc7515) (JWS).
 - Uses the signature verification key [found here](https://prd.pkey.dhdp.ontariohealth.ca/.well-known/jwks.json)
 - You can verify the signatures with the Verify Ontario app available at: [https://covid-19.ontario.ca/verify](https://covid-19.ontario.ca/verify)
+
+## External Dependencies (MacOS)
+
+pdf2image requires [poppler](http://macappstore.org/poppler/)
+
+```
+brew install poppler
+```
+
+pyzbar requires [zbar](https://formulae.brew.sh/formula/zbar)
+
+```
+brew install zbar
+```
+
+
+
+
 
 
 
