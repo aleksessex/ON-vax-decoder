@@ -1,4 +1,6 @@
 import base64
+from jose import jwk, jws
+from jose.constants import ALGORITHMS
 import json
 import os
 from pdf2image import convert_from_path
@@ -27,6 +29,15 @@ if not os.path.isfile(qr_path):
     print("File", sys.argv[1], "not found")
     sys.exit()
 
+if not os.path.isfile("on_sig_ver_key.json"):
+    print("Signature verification key file not found")
+    sys.exit()
+
+with open("on_sig_ver_key.json") as f:
+    sig_ver_key_raw = json.load(f)
+
+sig_ver_key = jwk.construct(sig_ver_key_raw)
+
 # Decode QR code and extract data payload
 pages = convert_from_path(qr_path)
 raw_qr = decode(pages[0])
@@ -47,19 +58,13 @@ jws_string = ""
 for p in b45_digit_pairs:
     jws_string += chr(int(p) + 45)
 
-# Split into base64 component strings
-jws_parts = jws_string.split(".")
+# Verify signature
+(encoded_header, encoded_payload, encoded_sig) = jws_string.split(".")
 
-b64_decoded_parts = []
+if not jws.verify(jws_string, sig_ver_key, ALGORITHMS.ES256) == b64_padding_decode(encoded_payload):
+    raise ValueError('INVALID digital signature')
 
-# Decode base64 components
-for jws_part in jws_parts:
-    b64_decoded_parts.append(b64_padding_decode(jws_part))
+# Decode and print payload
+payload = json.loads(zlib.decompress(b64_padding_decode(encoded_payload), wbits=-15))
 
-shc_data = []
-shc_data.append(json.loads(b64_decoded_parts[0]))
-shc_data.append(json.loads(zlib.decompress(b64_decoded_parts[1], wbits=-15)))
-
-for item in shc_data:
-    print(json.dumps(item, indent=4, sort_keys=True))
-
+print(json.dumps(payload, indent=4, sort_keys=True))
